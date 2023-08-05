@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PictureController;
 
 /*
@@ -39,3 +40,17 @@ Route::put('/quadri/modifica/{id}', [PictureController::class, 'update'])
 
 Route::delete('/quadri/elimina/{id}', [PictureController::class, 'destroy'])
 ->name('pictures.destroy');
+
+Route::get('/quadri/checkout/{id}', [PictureController::class, 'checkout'])
+->name('pictures.checkout');
+
+Route::post('/quadri/checkout/{id}', [PictureController::class, 'performCheckout'])
+->name('pictures.checkout.perform');
+
+Route::get('/utenti/profilo', [UserController::class, 'profile'])
+->name('users.profile')
+->middleware(['auth', 'verified']);
+
+Route::get('/utenti/quadri', [UserController::class, 'pictures'])
+->name('users.pictures')
+->middleware(['auth', 'verified']);

@@ -26,9 +26,21 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store($request)
     {
-        //
+        //Aggiungi record nel database
+
+        $customer = new Customer;
+
+        $customer->first_name = $request->nome;
+        $customer->last_name = $request->cognome;
+        $customer->phone = $request->telefono;
+        $customer->email = $request->email;
+        $customer->user_id = auth()->user()->id;
+
+        $customer->save();
+
+        return redirect()->route('index');
     }
 
     /**

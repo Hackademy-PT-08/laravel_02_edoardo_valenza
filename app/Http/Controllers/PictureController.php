@@ -37,12 +37,6 @@ class PictureController extends Controller
     public function store(Request $request)
     {
 
-        //Crea il nome dell'immagine
-
-        $imageId = uniqid();
-
-        $imageName = 'immagine-quadro-' . $imageId . '.' . $request->file('immagine')->extension();
-
         //Aggiungi record nel database
 
         $picture = new Picture;
@@ -50,10 +44,28 @@ class PictureController extends Controller
         $picture->title = $request->titolo;
         $picture->description = $request->descrizione;
         $picture->price = $request->prezzo;
-        $picture->image = $imageName;
-        $picture->image_id = $imageId;
 
-        $image = $request->file('immagine')->storeAs('public', $imageName);
+        if ($request->file('immagine')) {
+
+            //Crea il nome dell'immagine
+
+            $imageId = uniqid();
+
+            $imageName = 'immagine-quadro-' . $imageId . '.' . $request->file('immagine')->extension();
+
+            $image = $request->file('immagine')->storeAs('public', $imageName);
+
+            $picture->image = $imageName;
+            $picture->image_id = $imageId;
+
+        } else {
+
+            $picture->image = '';
+            $picture->image_id = '';
+
+        }
+
+        $picture->user_id = auth()->user()->id;
 
         $picture->save();
 
@@ -76,11 +88,19 @@ class PictureController extends Controller
 
         $picture = Picture::find($id);
 
-        return view('pictures.edit', [
+        if (auth()->user()->id == $picture->user_id) {
 
-            'picture' => $picture
+            return view('pictures.edit', [
 
-        ]);
+                'picture' => $picture
+
+            ]);
+
+        } else {
+
+            return redirect()->route('index');
+
+        }
 
     }
 
@@ -92,23 +112,31 @@ class PictureController extends Controller
         
         $picture = Picture::find($id);
 
-        $picture->title = $request->titolo;
-        $picture->description = $request->descrizione;
-        $picture->price = $request->prezzo;
+        if (auth()->user()->id == $picture->user_id) {
 
-        if ($request->file('immagine')) {
+            $picture->title = $request->titolo;
+            $picture->description = $request->descrizione;
+            $picture->price = $request->prezzo;
 
-            $imageId = $picture->image_id;
+            if ($request->file('immagine')) {
 
-            $imageName = 'immagine-quadro-' . $imageId . '.' . $request->file('immagine')->extension();
+                $imageId = $picture->image_id;
 
-            $image = $request->file('immagine')->storeAs('public', $imageName);
+                $imageName = 'immagine-quadro-' . $imageId . '.' . $request->file('immagine')->extension();
+
+                $image = $request->file('immagine')->storeAs('public', $imageName);
+
+            }
+
+            $picture->save();
+
+            return redirect()->route('pictures.index');
+
+        } else {
+
+            return redirect()->route('index');
 
         }
-
-        $picture->save();
-
-        return redirect()->route('pictures.index');
 
     }
 
@@ -122,5 +150,27 @@ class PictureController extends Controller
         $picture->delete();
 
         return redirect()->route('pitcures.index');
+    }
+
+    //Mostra vista checkout
+    public function checkout ($id) {
+
+        $picture = Picture::find($id);
+
+        return view('checkout.form', [
+
+            'picture' => $picture
+
+        ]);
+
+    }
+
+    //Esegui il checkout
+    public function performCheckout (Request $request, $id) {
+
+        $add_customer = (new CustomerController)->store($request);
+
+        return $add_customer;
+
     }
 }

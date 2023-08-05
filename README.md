@@ -27,3 +27,28 @@
 
 - Aggiunta delle relative funzione all'interno dei controller (index, store, update,  destroy)
 - Inserimento dei relativi metodi tramite i modelli per effettuare le varie operazioni all'interno del database
+
+## Installazione di Laravel Fortify
+
+- Installazione di Fortify tramite composer
+- Setup seguendo la documentazione
+- Creazione e collegamento delle viste di login, registrazione e verifica email
+- Aggiunta rotta con relativa vista per il profilo utente con form di aggiornamento dati account e password
+
+## Creazione della relazione tra tabella pictures e users
+
+- La tabella users rappresenta il parent nella relazione One-to-Many
+- Aggiunta della foreign key con colonna integer user_id all'interno della tabella pictures (child) tramite migrazione
+- Modifica della funzione store in PictureController aggiungendo il valore id dell'utente loggato all'interno della colonna user_id
+- Aggiunta della funzione pictures nel modello User con return metodo hasMany
+- Aggiunta della funzione users nel modello Picture con return metodo belongsTo
+- Aggiunta di una rotta con relativa vista che mostra i quadri appartenenti all'utente loggato tramite metodo pictures dal modello User
+- Aggiunta if statement per controllo permessi di modifica/eliminazione lato client (nella vista tutti i quadri) e server (nel metodo update del PictureController)
+
+## Creazione della relazione tra tabella customers e users
+- Svolgimento dei primi 4 punti del paragrafo superiori adattando il processo alla tabella customers
+- Aggiunta di una rotta checkout con relativa vista e form da compilare secondo le colonne delle tabelle orders e customers
+- Aggiunta di un metodo performCheckout all'interno del PictureController con relativa rotta per l'aggiunta di un cliente nella tabella customers
+- Aggiunta metodo store in CustomerController
+- Richiamo del metodo store di CustomerController in metodo performCheckout in PictureController
+- Aggiunta della funzione customers nel modello User con return metodo hasMany

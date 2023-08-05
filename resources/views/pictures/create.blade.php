@@ -1,5 +1,7 @@
 <x-layout>
 
+    <x-form-errors />
+
     <form action="{{route('pictures.store')}}" method="POST" enctype="multipart/form-data">
 
         @csrf

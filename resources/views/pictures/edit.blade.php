@@ -1,5 +1,7 @@
 <x-layout>
 
+    <x-form-errors />
+
     <form action="{{route('pictures.update', $picture->id)}}" method="POST" enctype="multipart/form-data">
 
         @csrf
