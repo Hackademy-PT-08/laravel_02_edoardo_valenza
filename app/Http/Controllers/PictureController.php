@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Picture;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class PictureController extends Controller
@@ -28,7 +29,13 @@ class PictureController extends Controller
      */
     public function create()
     {
-        return view('pictures.create');
+        $categories = Category::all();
+
+        return view('pictures.create', [
+
+            'categories' => $categories
+
+        ]);
     }
 
     /**
@@ -69,15 +76,37 @@ class PictureController extends Controller
 
         $picture->save();
 
+        //Prendo tutte le categorie selezionate dall'utente
+
+        $categories = $request->categorie;
+
+        $currentPicture = Picture::find($picture->id);
+
+        foreach ($categories as $category) {
+
+            //Aggiungo record in tabella category_picture
+
+            $currentPicture->categories()->attach($category);
+
+        }
+
         return redirect()->route('pictures.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Picture $picture)
+    public function show($id)
     {
-        //
+        
+        $picture = Picture::find($id);
+
+        return view('pictures.show', [
+
+            'picture' => $picture
+
+        ]);
+
     }
 
     /**
@@ -88,11 +117,14 @@ class PictureController extends Controller
 
         $picture = Picture::find($id);
 
+        $categories = Category::all();
+
         if (auth()->user()->id == $picture->user_id) {
 
             return view('pictures.edit', [
 
-                'picture' => $picture
+                'picture' => $picture,
+                'categories' => $categories
 
             ]);
 
@@ -130,6 +162,32 @@ class PictureController extends Controller
 
             $picture->save();
 
+            $currentPicture = Picture::find($picture->id);
+
+            //Elimino tutte le relazioni relative alle categorie
+
+            $allCategories = Category::all();
+
+            foreach ($allCategories as $singleCategory) {
+
+                //Aggiungo record in tabella category_picture
+
+                $currentPicture->categories()->detach($singleCategory->id);
+
+            }
+
+            //Prendo tutte le categorie selezionate dall'utente
+
+            $categories = $request->categorie;
+
+            foreach ($categories as $category) {
+
+                //Aggiungo record in tabella category_picture
+
+                $currentPicture->categories()->attach($category);
+
+            }
+
             return redirect()->route('pictures.index');
 
         } else {
@@ -149,7 +207,15 @@ class PictureController extends Controller
 
         $picture->delete();
 
-        return redirect()->route('pitcures.index');
+        foreach ($picture->categories as $singleCategory) {
+
+            //Aggiungo record in tabella category_picture
+
+            $currentPicture->categories()->detach($singleCategory->id);
+
+        }
+
+        return redirect()->route('pictures.index');
     }
 
     //Mostra vista checkout
@@ -170,7 +236,9 @@ class PictureController extends Controller
 
         $add_customer = (new CustomerController)->store($request);
 
-        return $add_customer;
+        $add_order = (new OrderController)->store($request, $add_customer);
+
+        return $add_order;
 
     }
 }

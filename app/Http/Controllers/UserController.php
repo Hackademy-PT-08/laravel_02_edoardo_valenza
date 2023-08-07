@@ -28,4 +28,19 @@ class UserController extends Controller
         ]);
 
     }
+
+    //Vista clienti dell'utente
+    public function customers () {
+
+        $current_user_id = auth()->user()->id;
+
+        $user_customers = User::find($current_user_id)->customers;
+
+        return view('user.customers', [
+
+            'user_customers' => $user_customers
+
+        ]);
+
+    }
 }

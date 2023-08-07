@@ -22,6 +22,18 @@
 
         <input type="file" name="immagine" id="immagine">
 
+        <label for="categorie">Categorie</label>
+
+        <select name="categorie[]" id="categorie" multiple>
+
+            @foreach ($categories as $category)
+            
+                <option value="{{$category->id}}">{{$category->name}}</option>
+
+            @endforeach
+
+        </select>
+
         <input type="submit" value="Aggiungi">
 
     </form>

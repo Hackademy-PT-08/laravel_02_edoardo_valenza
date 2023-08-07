@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PictureController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +39,14 @@ Route::get('/quadri/modifica/{id}', [PictureController::class, 'edit'])
 Route::put('/quadri/modifica/{id}', [PictureController::class, 'update'])
 ->name('pictures.update');
 
+Route::get('/quadri/{id}', [PictureController::class, 'show'])
+->name('pictures.show');
+
 Route::delete('/quadri/elimina/{id}', [PictureController::class, 'destroy'])
 ->name('pictures.destroy');
+
+Route::get('/quadri/categoria/{id}', [CategoryController::class, 'show'])
+->name('categories.show');
 
 Route::get('/quadri/checkout/{id}', [PictureController::class, 'checkout'])
 ->name('pictures.checkout');
@@ -53,4 +60,8 @@ Route::get('/utenti/profilo', [UserController::class, 'profile'])
 
 Route::get('/utenti/quadri', [UserController::class, 'pictures'])
 ->name('users.pictures')
+->middleware(['auth', 'verified']);
+
+Route::get('/utenti/clienti', [UserController::class, 'customers'])
+->name('users.customers')
 ->middleware(['auth', 'verified']);

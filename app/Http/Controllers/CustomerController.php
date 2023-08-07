@@ -40,7 +40,7 @@ class CustomerController extends Controller
 
         $customer->save();
 
-        return redirect()->route('index');
+        return $customer->id;
     }
 
     /**

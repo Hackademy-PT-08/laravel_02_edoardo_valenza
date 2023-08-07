@@ -18,11 +18,11 @@
 
         <label for="indirizzo-spedizione">Indirizzo di spedizione</label>
 
-        <input type="text" name="indirizzo-spedizione" id="indirizzo-spedizione">
+        <input type="text" name="indirizzo_spedizione" id="indirizzo-spedizione">
 
         <label for="indirizzo-fatturazione">Indirizzo di fatturazione</label>
 
-        <input type="text" name="indirizzo-fatturazione" id="indirizzo-fatturazione">
+        <input type="text" name="indirizzo_fatturazione" id="indirizzo-fatturazione">
 
         <label for="cap">CAP</label>
 
