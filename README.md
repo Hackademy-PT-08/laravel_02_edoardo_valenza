@@ -46,9 +46,17 @@
 - Aggiunta if statement per controllo permessi di modifica/eliminazione lato client (nella vista tutti i quadri) e server (nel metodo update del PictureController)
 
 ## Creazione della relazione tra tabella customers e users
+
 - Svolgimento dei primi 4 punti del paragrafo superiori adattando il processo alla tabella customers
 - Aggiunta di una rotta checkout con relativa vista e form da compilare secondo le colonne delle tabelle orders e customers
 - Aggiunta di un metodo performCheckout all'interno del PictureController con relativa rotta per l'aggiunta di un cliente nella tabella customers
 - Aggiunta metodo store in CustomerController
 - Richiamo del metodo store di CustomerController in metodo performCheckout in PictureController
 - Aggiunta della funzione customers nel modello User con return metodo hasMany
+
+## Creazione della relazione tra tabella categories e pictures
+
+- Aggiunta di una nuova tabella per gestire le relazioni tra le due tipologie di dati contente due colonne: category_id e picture_id
+- Creazione di una nuova tabella per gestire le categorie
+- Aggiunta dei relativi metodi nei modelli Picture e Category con funzione belongsTo
+- Creazione di una pagina dinamica di categoria che racchiude tutti i quadri appartenenti alla categoria selezionata tramite relative viste e controller
